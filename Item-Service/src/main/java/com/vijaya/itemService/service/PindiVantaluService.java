@@ -1,11 +1,13 @@
 package com.vijaya.itemService.service;
 
 import com.vijaya.itemService.dto.PindiVantaluDto;
+import com.vijaya.itemService.model.Pickel;
 import com.vijaya.itemService.model.PindiVantalu;
 import com.vijaya.itemService.repository.PindiVantaluRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -91,5 +93,10 @@ public class PindiVantaluService {
         }
         pindiVantaluRepository.deleteById(id);
         return "Deleted the Item Successfully";
+    }
+    public BigDecimal getItemPrice(Long id) {
+        PindiVantalu res = pindiVantaluRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Item not found with id: " + id));
+        return res.getPrice();
     }
 }

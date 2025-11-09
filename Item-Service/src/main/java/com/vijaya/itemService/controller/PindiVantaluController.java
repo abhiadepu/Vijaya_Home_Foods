@@ -6,6 +6,7 @@ import com.vijaya.itemService.service.PindiVantaluService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -40,4 +41,8 @@ public class PindiVantaluController {
         return pindiVantaluService.deletePindiVantalu(id);
     }
 
+    @GetMapping("/{id}/price")
+    private BigDecimal getItemPrice(@PathVariable Long itemId){
+        return pindiVantaluService.getItemPrice(itemId);
+    }
 }

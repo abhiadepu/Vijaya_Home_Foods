@@ -6,6 +6,7 @@ import com.vijaya.itemService.repository.PickelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,6 +42,8 @@ public class PickelService {
                 ))
                 .collect(Collectors.toList());
     }
+
+
 
     public String deletePickel(Long id) {
         if (!pickelRepository.existsById(id)) {
@@ -87,5 +90,11 @@ public class PickelService {
         );
 
 
+    }
+
+    public BigDecimal getItemPrice(Long id) {
+        Pickel pickel = pickelRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Item not found with id: " + id));
+        return pickel.getPrice();
     }
 }
