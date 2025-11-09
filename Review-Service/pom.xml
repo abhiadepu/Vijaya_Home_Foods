@@ -8,11 +8,11 @@
 		<version>3.5.7</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.vijaya.itemService</groupId>
-	<artifactId>Item-Service</artifactId>
+	<groupId>com.vijaya</groupId>
+	<artifactId>Review-Service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Item-Service</name>
-	<description>Vijaya Foods Items</description>
+	<name>Review-Service</name>
+	<description>Review Service </description>
 	<url/>
 	<licenses>
 		<license/>
