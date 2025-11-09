@@ -5,5 +5,7 @@ import com.vijaya.cart_service.payloads.CartDTO;
 
 public interface CartService {
 
-    public Cart addToCart(Long userId, Long itemId, Integer quantity);
+    public CartDTO addToCart(Long userId, Long itemId, Integer quantity);
+    public CartDTO getCart(Long userId);
+    public String updateQuantity(Long itemId);
 }

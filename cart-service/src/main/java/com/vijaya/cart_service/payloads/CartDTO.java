@@ -8,7 +8,7 @@ public record CartDTO(
         Long cartId,
         Long userId,
         double totalAmount,
-        int discount,
-        List<CartItem> items
+        double discount,
+        List<CartItemDTO> items
 ) {
 }

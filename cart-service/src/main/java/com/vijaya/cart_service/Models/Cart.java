@@ -34,7 +34,7 @@ public class Cart {
     }
 
     public void setUserId(Long userId) {
-        userId = userId;
+        this.userId = userId;
     }
 
 
