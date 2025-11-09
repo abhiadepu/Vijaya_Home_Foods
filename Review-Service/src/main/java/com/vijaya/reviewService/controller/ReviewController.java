@@ -1,8 +1,10 @@
 package com.vijaya.reviewService.controller;
+
 import com.vijaya.reviewService.dto.ReviewDto;
+import com.vijaya.reviewService.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import com.vijaya.reviewService.service.ReviewService;
+
 import java.util.List;
 
 @RestController
@@ -13,8 +15,10 @@ public class ReviewController {
     private ReviewService service;
 
     @PostMapping
-    public ReviewDto create(@RequestBody ReviewDto dto) {
-        return service.createReview(dto);
+    public ReviewDto createReview(
+            @RequestBody ReviewDto dto,
+            @RequestHeader("Authorization") String token) {
+        return service.createReview(dto, token);
     }
 
     @GetMapping("/item/{itemId}")
