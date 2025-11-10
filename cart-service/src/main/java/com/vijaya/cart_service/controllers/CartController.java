@@ -28,8 +28,14 @@ public class CartController {
     }
 
     @GetMapping("/get")
-    public ResponseEntity<CartDTO> getCart(@RequestParam Long userId){
-        return cartService.getCart(userId);
+    public ResponseEntity<CartDTO> getCart(HttpServletRequest request){
+        return cartService.getCart(request);
+    }
+
+    @GetMapping("getuid")
+    public Long getUserId(HttpServletRequest request){
+        Long userId = Long.valueOf(request.getHeader("X-User-Id"));
+        return userId;
     }
 
 }

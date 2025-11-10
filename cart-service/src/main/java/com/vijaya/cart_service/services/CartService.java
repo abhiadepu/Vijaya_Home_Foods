@@ -8,6 +8,6 @@ import org.springframework.http.ResponseEntity;
 public interface CartService {
 
     public CartDTO addToCart(Long userId, Long itemId, Integer quantity);
-    public ResponseEntity<CartDTO> getCart(Long userid);
+    public ResponseEntity<CartDTO> getCart(HttpServletRequest request);
     public String updateQuantity(Long itemId);
 }

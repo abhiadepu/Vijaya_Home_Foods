@@ -1,10 +1,10 @@
-package com.vijaya.jwt_auth;
+package com.vijaya.api_gateway;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class JwtAuthApplicationTests {
+class ApiGatewayApplicationTests {
 
 	@Test
 	void contextLoads() {

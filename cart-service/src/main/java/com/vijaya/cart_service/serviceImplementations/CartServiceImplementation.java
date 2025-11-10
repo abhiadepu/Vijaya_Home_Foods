@@ -85,11 +85,11 @@ public class CartServiceImplementation implements CartService {
     }
 
     @Override
-    public ResponseEntity<CartDTO> getCart(Long userId) {
-        //Long userId = (Long)request.getAttribute("userId");
-        System.out.println(userId);
+    public ResponseEntity<CartDTO> getCart(HttpServletRequest request) {
+        Long userId = Long.valueOf(request.getHeader("X-User-Id"));
+
         Optional<Cart> optionalCart = cartRepository.findByUserId(userId);
-        System.out.println(optionalCart.isPresent());
+
         Cart cart;
         if (optionalCart.isPresent()) {
 
