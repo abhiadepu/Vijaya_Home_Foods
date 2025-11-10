@@ -1,6 +1,6 @@
 package com.vijaya.cart_service.serviceImplementations;
 
-import com.netflix.discovery.converters.Auto;
+
 import com.vijaya.cart_service.Models.Cart;
 import com.vijaya.cart_service.Models.CartItem;
 import com.vijaya.cart_service.Repositories.CartItemRepository;
@@ -9,9 +9,10 @@ import com.vijaya.cart_service.feign.ItemClient;
 import com.vijaya.cart_service.payloads.CartDTO;
 import com.vijaya.cart_service.payloads.CartItemDTO;
 import com.vijaya.cart_service.services.CartService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -84,17 +85,17 @@ public class CartServiceImplementation implements CartService {
     }
 
     @Override
-    public CartDTO getCart(Long userId) {
+    public ResponseEntity<CartDTO> getCart(Long userId) {
+        //Long userId = (Long)request.getAttribute("userId");
+        System.out.println(userId);
         Optional<Cart> optionalCart = cartRepository.findByUserId(userId);
+        System.out.println(optionalCart.isPresent());
         Cart cart;
         if (optionalCart.isPresent()) {
+
             cart = optionalCart.get();
         } else {
-            cart = new Cart();
-            cart.setDiscount(0.0);
-            cart.setTotalAmount(0.0);
-            cart.setUserId(userId);
-            cartRepository.save(cart);
+            return ResponseEntity.status(202).body(null);
         }
 
         List<CartItemDTO> itemDTOs = cart.getItems().stream()
@@ -106,13 +107,13 @@ public class CartServiceImplementation implements CartService {
                         item.getTotal(),
                         cart.getCartId()
                 )).toList();
-        return new CartDTO(
+        return ResponseEntity.status(200).body(new CartDTO(
                 cart.getCartId(),
                 cart.getUserId(),
                 cart.getTotalAmount(),
                 cart.getDiscount() != 0.0 ? cart.getDiscount() : 0.0,
                 itemDTOs
-        );
+        ));
     }
 
     @Override

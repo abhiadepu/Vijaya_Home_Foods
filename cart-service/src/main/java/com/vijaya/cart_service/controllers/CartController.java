@@ -5,6 +5,7 @@ import com.netflix.discovery.converters.Auto;
 import com.vijaya.cart_service.Models.Cart;
 import com.vijaya.cart_service.payloads.CartDTO;
 import com.vijaya.cart_service.services.CartService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +28,7 @@ public class CartController {
     }
 
     @GetMapping("/get")
-    public CartDTO getCart(@RequestParam Long userId){
+    public ResponseEntity<CartDTO> getCart(@RequestParam Long userId){
         return cartService.getCart(userId);
     }
 

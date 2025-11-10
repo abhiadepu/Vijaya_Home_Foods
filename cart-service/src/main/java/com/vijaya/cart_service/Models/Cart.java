@@ -15,7 +15,7 @@ public class Cart {
     private double totalAmount;
     private double discount;
     private LocalDateTime createdAt = LocalDateTime.now();
-    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<CartItem> items;
 
     public Cart() {
