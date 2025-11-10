@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
 @RestController
 @RequestMapping("/api/reviews")
 public class ReviewController {
@@ -15,10 +16,8 @@ public class ReviewController {
     private ReviewService service;
 
     @PostMapping
-    public ReviewDto createReview(
-            @RequestBody ReviewDto dto,
-            @RequestHeader("Authorization") String token) {
-        return service.createReview(dto, token);
+    public ReviewDto create(@RequestBody ReviewDto dto) {
+        return service.createReview(dto);
     }
 
     @GetMapping("/item/{itemId}")

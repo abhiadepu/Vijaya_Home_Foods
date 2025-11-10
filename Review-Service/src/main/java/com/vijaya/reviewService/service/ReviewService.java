@@ -24,18 +24,15 @@ public class ReviewService {
     @Autowired
     private UserClient userClient;
 
-    public ReviewDto createReview(ReviewDto dto, String token) {
-        // 1️⃣ Extract userId from JWT using user-service Feign call
-        Long userId = userClient.extractUserIdFromToken(token);
-
-        // 2️⃣ Verify user exists
+    public ReviewDto createReview(ReviewDto dto) {
+        // Check if user exists
         try {
-            userClient.getUser(userId);
+            userClient.getUser(dto.userId());
         } catch (Exception e) {
-            throw new RuntimeException("User not found with ID: " + userId);
+            throw new RuntimeException("User not found with ID: " + dto.userId());
         }
 
-        // 3️⃣ Verify item exists based on category
+        // Check if item exists based on category
         try {
             if (dto.category().equalsIgnoreCase("pickel")) {
                 itemClient.getPickelById(dto.itemId());
@@ -46,9 +43,9 @@ public class ReviewService {
             throw new RuntimeException("Item not found with ID: " + dto.itemId());
         }
 
-        // 4️⃣ Save review
+        // Create review manually (no Lombok builder)
         Review review = new Review();
-        review.setUserId(userId);
+        review.setUserId(dto.userId());
         review.setItemId(dto.itemId());
         review.setCategory(dto.category());
         review.setComment(dto.comment());
@@ -94,3 +91,4 @@ public class ReviewService {
                 .collect(Collectors.toList());
     }
 }
+
