@@ -1,9 +1,9 @@
 package com.vijaya.itemService.controller;
 
-import com.vijaya.itemService.dto.PickelDto;
 import com.vijaya.itemService.dto.PindiVantaluDto;
 import com.vijaya.itemService.service.PindiVantaluService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -14,35 +14,52 @@ import java.util.List;
 public class PindiVantaluController {
 
     @Autowired
-    private PindiVantaluService pindiVantaluService;
+    private PindiVantaluService service;
 
     @PostMapping
-    private PindiVantaluDto createPindiVantalu(@RequestBody PindiVantaluDto pindiVantaluDto){
-        return pindiVantaluService.createPindiVantalu(pindiVantaluDto);
+    public ResponseEntity<PindiVantaluDto> create(@RequestBody PindiVantaluDto dto) {
+        return ResponseEntity.ok(service.createPindiVantalu(dto));
     }
 
     @GetMapping
-    private List<PindiVantaluDto> getAllPindiVantalu(){
-        return pindiVantaluService.getAllPindiVantalu();
+    public ResponseEntity<List<PindiVantaluDto>> getAll() {
+        return ResponseEntity.ok(service.getAllPindiVantalu());
     }
 
     @GetMapping("/{id}")
-    private PindiVantaluDto getPindiVantaluById(@PathVariable Long id){
-        return pindiVantaluService.getPindiVantaluById(id);
+    public ResponseEntity<PindiVantaluDto> getById(@PathVariable Long id) {
+        return ResponseEntity.ok(service.getPindiVantaluById(id));
     }
 
     @PutMapping
-    private PindiVantaluDto updatePindiVantalu(@RequestParam PindiVantaluDto pindiVantaluDto){
-        return pindiVantaluService.updatePindiVantalu(pindiVantaluDto);
+    public ResponseEntity<PindiVantaluDto> update(@RequestBody PindiVantaluDto dto) {
+        return ResponseEntity.ok(service.updatePindiVantalu(dto));
     }
 
     @DeleteMapping("/{id}")
-    private String deletePindiVantalu(@PathVariable Long id) {
-        return pindiVantaluService.deletePindiVantalu(id);
+    public ResponseEntity<String> delete(@PathVariable Long id) {
+        return ResponseEntity.ok(service.deletePindiVantalu(id));
     }
 
     @GetMapping("/{id}/price")
-    private BigDecimal getItemPrice(@PathVariable Long itemId){
-        return pindiVantaluService.getItemPrice(itemId);
+    public ResponseEntity<BigDecimal> getPrice(@PathVariable Long id) {
+        return ResponseEntity.ok(service.getItemPrice(id));
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<PindiVantaluDto>> search(@RequestParam String keyword) {
+        return ResponseEntity.ok(service.searchPindiVantalu(keyword));
+    }
+
+    @GetMapping("/search/category")
+    public ResponseEntity<List<PindiVantaluDto>> searchByCategory(@RequestParam String category) {
+        return ResponseEntity.ok(service.searchByCategory(category));
+    }
+
+    @GetMapping("/search/price-range")
+    public ResponseEntity<List<PindiVantaluDto>> searchByPriceRange(
+            @RequestParam BigDecimal minPrice,
+            @RequestParam BigDecimal maxPrice) {
+        return ResponseEntity.ok(service.searchByPriceRange(minPrice, maxPrice));
     }
 }

@@ -5,7 +5,10 @@ import jakarta.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "pickels")
+@Table(name = "pickels", indexes = {
+        @Index(name = "idx_pickel_name", columnList = "name"),
+        @Index(name = "idx_pickel_category", columnList = "category")
+})
 public class Pickel {
 
     @Id
@@ -16,7 +19,7 @@ public class Pickel {
 
     private String description;
 
-    private String Category;
+    private String category;
 
     private String image;
 
@@ -27,7 +30,7 @@ public class Pickel {
         this.id = id;
         this.name = name;
         this.description = description;
-        Category = category;
+        this.category = category;
         this.image = image;
         this.price = price;
     }
@@ -60,11 +63,11 @@ public class Pickel {
     }
 
     public String getCategory() {
-        return Category;
+        return category;
     }
 
     public void setCategory(String category) {
-        Category = category;
+        this.category = category;
     }
 
     public BigDecimal getPrice() {

@@ -1,12 +1,17 @@
 package com.vijaya.reviewService.service;
 
 import com.vijaya.reviewService.dto.ReviewDto;
+import com.vijaya.reviewService.exception.ResourceNotFoundException;
 import com.vijaya.reviewService.feign.ItemClient;
 import com.vijaya.reviewService.feign.UserClient;
 import com.vijaya.reviewService.model.Review;
 import com.vijaya.reviewService.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.List;
@@ -24,26 +29,27 @@ public class ReviewService {
     @Autowired
     private UserClient userClient;
 
+    @Transactional
+    @CacheEvict(value = {"reviewsByItem", "reviewsByUser"}, allEntries = true)
     public ReviewDto createReview(ReviewDto dto) {
-        // Check if user exists
         try {
             userClient.getUser(dto.userId());
         } catch (Exception e) {
-            throw new RuntimeException("User not found with ID: " + dto.userId());
+            throw new ResourceNotFoundException("User not found with ID: " + dto.userId());
         }
 
-        // Check if item exists based on category
         try {
-            if (dto.category().equalsIgnoreCase("pickel")) {
+            if (dto.category().equalsIgnoreCase("pickels") || dto.category().equalsIgnoreCase("pickel")) {
                 itemClient.getPickelById(dto.itemId());
-            } else {
+            } else if (dto.category().equalsIgnoreCase("pindivantalu")) {
                 itemClient.getPindiVantaluById(dto.itemId());
+            } else {
+                throw new RuntimeException("Invalid category: " + dto.category());
             }
         } catch (Exception e) {
-            throw new RuntimeException("Item not found with ID: " + dto.itemId());
+            throw new ResourceNotFoundException("Item not found with ID: " + dto.itemId());
         }
 
-        // Create review manually (no Lombok builder)
         Review review = new Review();
         review.setUserId(dto.userId());
         review.setItemId(dto.itemId());
@@ -53,42 +59,40 @@ public class ReviewService {
         review.setCreatedAt(Instant.now());
 
         Review saved = repo.save(review);
+        return mapToDto(saved);
+    }
 
+    // ✅ Cache results of getByItem
+    @Cacheable(value = "reviewsByItem", key = "#itemId")
+    public List<ReviewDto> getByItem(Long itemId) {
+        System.out.println("⏳ Fetching reviews for itemId " + itemId + " from DB...");
+        List<Review> reviews = repo.findByItemId(itemId);
+        if (reviews.isEmpty()) {
+            throw new ResourceNotFoundException("No reviews found for item ID: " + itemId);
+        }
+        return reviews.stream().map(this::mapToDto).collect(Collectors.toList());
+    }
+
+    // ✅ Optional: cache reviews per user too
+    @Cacheable(value = "reviewsByUser", key = "#userId")
+    public List<ReviewDto> getByUser(Long userId) {
+        System.out.println("⏳ Fetching reviews for userId " + userId + " from DB...");
+        List<Review> reviews = repo.findByUserId(userId);
+        if (reviews.isEmpty()) {
+            throw new ResourceNotFoundException("No reviews found for user ID: " + userId);
+        }
+        return reviews.stream().map(this::mapToDto).collect(Collectors.toList());
+    }
+
+    private ReviewDto mapToDto(Review r) {
         return new ReviewDto(
-                saved.getId(),
-                saved.getUserId(),
-                saved.getItemId(),
-                saved.getCategory(),
-                saved.getComment(),
-                saved.getRating(),
-                saved.getCreatedAt()
+                r.getId(),
+                r.getUserId(),
+                r.getItemId(),
+                r.getCategory(),
+                r.getComment(),
+                r.getRating(),
+                r.getCreatedAt()
         );
     }
-
-    public List<ReviewDto> getByItem(Long itemId) {
-        return repo.findByItemId(itemId).stream()
-                .map(r -> new ReviewDto(
-                        r.getId(),
-                        r.getUserId(),
-                        r.getItemId(),
-                        r.getCategory(),
-                        r.getComment(),
-                        r.getRating(),
-                        r.getCreatedAt()))
-                .collect(Collectors.toList());
-    }
-
-    public List<ReviewDto> getByUser(Long userId) {
-        return repo.findByUserId(userId).stream()
-                .map(r -> new ReviewDto(
-                        r.getId(),
-                        r.getUserId(),
-                        r.getItemId(),
-                        r.getCategory(),
-                        r.getComment(),
-                        r.getRating(),
-                        r.getCreatedAt()))
-                .collect(Collectors.toList());
-    }
 }
-
