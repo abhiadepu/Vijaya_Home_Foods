@@ -7,4 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 public interface CartItemRepository extends JpaRepository<CartItem,Long> {
     @Query("SELECT SUM(c.total) FROM CartItem c WHERE c.cart.cartId = :cartId")
     Double sumLineTotalByCartId(Long cartId);
+    @Query("DELETE FROM CartItem c WHERE c.cart.cartId = :cartId")
+    void deleteByCartId(Long cartId);
 }

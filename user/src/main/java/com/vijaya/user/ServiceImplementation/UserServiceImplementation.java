@@ -43,9 +43,15 @@ public class UserServiceImplementation implements UserService {
 
     @Override
     public String login(UserLoginDTO loginDTO) {
+        System.out.println("loginnnn");
+        System.out.println(loginDTO.email()+" "+loginDTO.password());
         Authentication auth = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginDTO.email(), loginDTO.password()));
+        System.out.println("loginnnn authhhh");
+        System.out.println(auth);
+
         UserDetails userDetails = (UserDetails) auth.getPrincipal();
+        System.out.println(userDetails.getUsername());
         return jwtService.generateToken(userDetails.getUsername());
     }
 

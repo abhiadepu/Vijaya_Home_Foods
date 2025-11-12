@@ -28,8 +28,11 @@ public class JwtUtil {
     private Key getSignKey() {
         return Keys.hmacShaKeyFor(secretKey.getBytes());
     }
+
     public String generateToken(String email){
+        System.out.println("JET UTIL "+email);
         User user = userRepository.findByEmail(email);
+        System.out.println("user fetched success" +user.getEmail());
         return Jwts.builder()
                 .setSubject(email)
                 .claim("userId",user.getUserId())

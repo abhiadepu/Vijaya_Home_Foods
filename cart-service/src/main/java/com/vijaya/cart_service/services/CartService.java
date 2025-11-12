@@ -10,4 +10,5 @@ public interface CartService {
     public CartDTO addToCart(Long userId, Long itemId, Integer quantity);
     public ResponseEntity<CartDTO> getCart(HttpServletRequest request);
     public String updateQuantity(Long itemId);
+    public String deleteCart(Long userId);
 }

@@ -11,6 +11,7 @@ import com.vijaya.cart_service.payloads.CartItemDTO;
 import com.vijaya.cart_service.services.CartService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
@@ -121,5 +122,18 @@ public class CartServiceImplementation implements CartService {
 
 
         return "SuccessFully updated";
+    }
+
+    @Override
+    public String deleteCart(Long userId) {
+        try{
+            cartItemRepository.deleteByCartId(cartRepository.findByUserId(userId).get().getCartId());
+            cartRepository.deleteByUserId(userId);
+        }catch (EmptyResultDataAccessException e){
+            System.out.println(e);
+        }
+
+
+        return "User Deleted!";
     }
 }

@@ -17,7 +17,7 @@ public class User {
     private Long phno;
     private LocalDateTime createdAt;
     private String address;
-    private String role = "USER";
+    private String role = "ROLE_USER";
 
     public User() {
     }

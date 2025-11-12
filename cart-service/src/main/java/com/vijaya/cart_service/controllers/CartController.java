@@ -1,8 +1,7 @@
 package com.vijaya.cart_service.controllers;
 
 
-import com.netflix.discovery.converters.Auto;
-import com.vijaya.cart_service.Models.Cart;
+
 import com.vijaya.cart_service.payloads.CartDTO;
 import com.vijaya.cart_service.services.CartService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -36,6 +35,12 @@ public class CartController {
     public Long getUserId(HttpServletRequest request){
         Long userId = Long.valueOf(request.getHeader("X-User-Id"));
         return userId;
+    }
+
+    @DeleteMapping("/del")
+    public String deleteCart(HttpServletRequest request){
+        Long userId = Long.valueOf(request.getHeader("X-User-Id"));
+        return cartService.deleteCart(userId);
     }
 
 }
