@@ -32,7 +32,7 @@ public class JwtAuthFilter implements GlobalFilter {
 
         // Skip Auth endpoints (login/register)
 
-        if (path.startsWith("/auth")) {
+        if (path.startsWith("/auth") || path.startsWith("/public")) {
 
             return chain.filter(exchange);
         }

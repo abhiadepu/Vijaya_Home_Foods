@@ -134,6 +134,6 @@ public class CartServiceImplementation implements CartService {
         }
 
 
-        return "User Deleted!";
+        return "Cart Sucessfully cleared!";
     }
 }

@@ -19,10 +19,10 @@ public class CartController {
 
     @PostMapping("/add")
     public ResponseEntity<CartDTO> addToCart(
-            @RequestParam Long userId,
+            HttpServletRequest request,
             @RequestParam Long itemId,
             @RequestParam Integer quantity) {
-
+        Long userId = Long.valueOf(request.getHeader("X-User-Id"));
         return ResponseEntity.ok(cartService.addToCart(userId, itemId, quantity));
     }
 

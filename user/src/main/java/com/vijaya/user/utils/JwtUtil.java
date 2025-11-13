@@ -30,15 +30,15 @@ public class JwtUtil {
     }
 
     public String generateToken(String email){
-        System.out.println("JET UTIL "+email);
+
         User user = userRepository.findByEmail(email);
-        System.out.println("user fetched success" +user.getEmail());
+
         return Jwts.builder()
                 .setSubject(email)
                 .claim("userId",user.getUserId())
                 .claim("role",user.getRole())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 60 * 60 * 1000)) // 1 hour expiry
+                .setExpiration(new Date(System.currentTimeMillis() + 24 * 60 * 60 * 1000))
                 .signWith(getSignKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
